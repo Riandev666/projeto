@@ -10,14 +10,22 @@ import {
   LinkNavegacao,
   BotaoMinhaConta,
 } from "./styles";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [estaAberto, setEstaAberto] = useState(false);
+  const navigate = useNavigate()
+
+    const irPara = (rota) => {
+    navigate(rota);
+    setEstaAberto(false);
+  };
 
   return (
+    
     <>
       <Cabecalho>
-        <Logotipo>
+         <Logotipo onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
           Opin<span>aí</span>
         </Logotipo>
         <IconeMenu onClick={() => setEstaAberto(true)}>
@@ -41,9 +49,8 @@ export default function Header() {
           <LinkNavegacao destaque href="#">
             Pesquisas Disponíveis
           </LinkNavegacao>
-          <LinkNavegacao href="#">Extrato</LinkNavegacao>
-          <LinkNavegacao href="#">Informações Cadastrais</LinkNavegacao>
-          <LinkNavegacao href="#">Indique um amigo</LinkNavegacao>
+          <LinkNavegacao onClick={() => irPara("/usuario")}>Perfil</LinkNavegacao>
+          <LinkNavegacao onClick={() => irPara("/convidar")}>Indique um amigo</LinkNavegacao>
           <LinkNavegacao href="#">Portal de recompensas</LinkNavegacao>
           <BotaoMinhaConta>
             Sair <span>▼</span>

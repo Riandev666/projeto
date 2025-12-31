@@ -57,26 +57,35 @@ export default function Pesquisas() {
     }
   };
 
-  useEffect(() => {
-    async function carregarDados() {
-      try {
-        const token = localStorage.getItem("@Opinai:token");
+useEffect(() => {
+  async function carregarDados() {
+    try {
+      const token = localStorage.getItem("@Opinai:token");
 
-        const resUser = await api.get("/api/user/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsuario(resUser.data);
+      const resUser = await api.get("/api/user/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const dadosUsuario = resUser.data;
+      setUsuario(dadosUsuario);
 
-        const resSurveys = await api.get("/api/surveys");
-        setPesquisasDisponiveis(resSurveys.data);
-      } catch (error) {
-        console.error("Erro ao carregar dados do banco:", error);
-      } finally {
-        setLoading(false);
-      }
+      const resSurveys = await api.get("/api/surveys");
+      const todasAsPesquisas = resSurveys.data;
+
+      // 3. FILTRO: Se o ID da pesquisa estiver na lista de respondidas do usuário, ela não aparece
+      const respondidasIds = dadosUsuario.pesquisasRespondidas || [];
+      const disponiveis = todasAsPesquisas.filter(
+        (survey) => !respondidasIds.includes(survey._id)
+      );
+
+      setPesquisasDisponiveis(disponiveis);
+    } catch (error) {
+      console.error("Erro ao carregar dados do banco:", error);
+    } finally {
+      setLoading(false);
     }
-    carregarDados();
-  }, []);
+  }
+  carregarDados();
+}, []);
 
   return (
     <ContainerPesquisas>

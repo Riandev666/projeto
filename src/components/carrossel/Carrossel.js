@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // 1. Importe o useNavigate
+import { useNavigate } from "react-router-dom";
 import { 
   SecaoExperiencias, ContainerTextoFixo, TituloCompartilhe, CarrosselWrapper, 
   SlideItem, TextoExperiencia, ContainerInfoExtra, IndicadoresCarrossel, 
@@ -7,7 +7,7 @@ import {
 } from "./styles";
 
 export default function Carrossel() {
-  const navigate = useNavigate(); // 2. Inicialize o navigate
+  const navigate = useNavigate();
   
   const slides = [
     "Crie uma conta e complete seu perfil para ganhar sua primeira recompensa.",
@@ -53,7 +53,6 @@ export default function Carrossel() {
         ))}
       </IndicadoresCarrossel>
 
-      {/* 3. Adicione o evento de clique aqui */}
       <BotaoCadastro onClick={() => navigate("/cadastro")}>
         Quero me cadastrar
       </BotaoCadastro>

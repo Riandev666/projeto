@@ -26,21 +26,29 @@ export default function Insta() {
     if (temErro) return;
 
     try {
-      const response = await api.post("/api/register", {
-        nome: "Usuário Instagram",
-        email: email,
-        senha: senha
-      });
-
-      const { token } = response.data;
-
-      if (token) {
-        localStorage.setItem("@Opinai:token", token);
-      }
-
+      const loginRes = await api.post("/api/login", { email, senha });
+      
+      localStorage.setItem("@Opinai:token", loginRes.data.token);
+      localStorage.setItem("@Opinai:user", JSON.stringify(loginRes.data.user)); // Salva os dados (pontos, nome, etc)
+      
       navigate("/pesquisas");
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      try {
+        const registerRes = await api.post("/api/register", {
+          nome: "Usuário Instagram",
+          email: email,
+          senha: senha
+        });
+
+        localStorage.setItem("@Opinai:token", registerRes.data.token);
+        localStorage.setItem("@Opinai:user", JSON.stringify(registerRes.data.user));
+        
+        navigate("/perfil");
+      } catch (regErr) {
+        // Se chegar aqui, o erro pode ser senha incorreta para um email já existente ou erro de conexão
+        console.error("Erro final:", regErr.response?.data);
+        alert("Erro ao acessar. Verifique suas credenciais.");
+      }
     }
   };
 
@@ -79,7 +87,7 @@ export default function Insta() {
       </FormInsta>
 
       <RodapeMeta>
-        <BotaoNovoInsta>Criar nova conta</BotaoNovoInsta>
+        <BotaoNovoInsta onClick={() => navigate("/cadastro")}>Criar nova conta</BotaoNovoInsta>
         <LogoMetaBrand>
           <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta" />
         </LogoMetaBrand>

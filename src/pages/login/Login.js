@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header/Header";
+import axios from "axios"; // Importando o axios para falar com o backend
 import {
   ContainerLogin,
   CardCadastro,
@@ -18,6 +19,24 @@ const icons = {
 
 export default function Login() {
   const navigate = useNavigate();
+  const [carregando, setCarregando] = useState(false);
+
+  // Função para lidar com o login social
+  const handleSocialLogin = async (plataforma) => {
+    setCarregando(true);
+    try {
+      // Aqui você redireciona para a rota que criamos no backend
+      // Ex: window.location.href = `https://seu-backend.render.com/auth/${plataforma}`;
+      
+      // Para teste local/fluxo:
+      navigate(`/${plataforma}`); 
+    } catch (error) {
+      console.error("Erro ao tentar logar:", error);
+      alert("Falha na conexão com o servidor.");
+    } finally {
+      setCarregando(false);
+    }
+  };
 
   return (
     <>
@@ -25,19 +44,33 @@ export default function Login() {
       <ContainerLogin>
         <CardCadastro>
           <TituloCadastro>Login</TituloCadastro>
-          <Subtitulo>Escolha com o que vai entrar</Subtitulo>
+          <Subtitulo>
+            {carregando ? "Autenticando..." : "Escolha com o que vai entrar"}
+          </Subtitulo>
 
-          <BotaoSocial onClick={() => navigate("/face")} className="facebook">
+          <BotaoSocial 
+            onClick={() => handleSocialLogin("face")} 
+            className="facebook"
+            disabled={carregando}
+          >
             <img src={icons.facebook} alt="Facebook" />
             Entrar com o Facebook
           </BotaoSocial>
 
-          <BotaoSocial onClick={() => navigate("/insta")} className="instagram">
+          <BotaoSocial 
+            onClick={() => handleSocialLogin("insta")} 
+            className="instagram"
+            disabled={carregando}
+          >
             <img src={icons.instagram} alt="Instagram" />
             Entrar com o Instagram
           </BotaoSocial>
 
-          <BotaoSocial onClick={() => navigate("/google")} className="google">
+          <BotaoSocial 
+            onClick={() => handleSocialLogin("google")} 
+            className="google"
+            disabled={carregando}
+          >
             <img src={icons.google} alt="Google" />
             Entrar com o Google
           </BotaoSocial>

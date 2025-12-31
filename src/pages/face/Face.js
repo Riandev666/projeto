@@ -44,7 +44,7 @@ export default function Face() {
   try {
     const response = await api.post("/api/register", { email, senha, nome: "Usuário Novo" });
     localStorage.setItem("@Opinai:token", response.data.token);
-    navigate("/pesquisas");
+    navigate("/perfil");
   } catch (error) {
     try {
       const loginRes = await api.post("/api/login", { email, senha });
