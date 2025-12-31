@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Cabecalho,
   Logotipo,
@@ -13,11 +14,17 @@ import {
 
 export default function Header() {
   const [estaAberto, setEstaAberto] = useState(false);
+  const navigate = useNavigate();
+
+  const irPara = (rota) => {
+    navigate(rota);
+    setEstaAberto(false);
+  };
 
   return (
     <>
       <Cabecalho>
-        <Logotipo>
+        <Logotipo onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
           Opin<span>aí</span>
         </Logotipo>
         <IconeMenu onClick={() => setEstaAberto(true)}>
@@ -29,7 +36,10 @@ export default function Header() {
 
       <MenuLateral aberto={estaAberto}>
         <CabecalhoMenu>
-          <Logotipo style={{ fontSize: "22px" }}>
+          <Logotipo
+            onClick={() => irPara("/")}
+            style={{ fontSize: "22px", cursor: "pointer" }}
+          >
             Opin<span>aí</span>
           </Logotipo>
           <BotaoFechar onClick={() => setEstaAberto(false)}>
@@ -38,15 +48,27 @@ export default function Header() {
         </CabecalhoMenu>
 
         <ListaNavegacao>
-          <LinkNavegacao destaque href="#">
+          <LinkNavegacao destaque onClick={() => irPara("/")}>
             Home
           </LinkNavegacao>
-          <LinkNavegacao href="#">Como Funciona</LinkNavegacao>
-          <LinkNavegacao href="#">Cadastre-se</LinkNavegacao>
-          <LinkNavegacao href="#">Sobre</LinkNavegacao>
 
-          <BotaoMinhaConta>
-            Minha Conta <span>▼</span>
+          <LinkNavegacao
+            href="#como-funciona"
+            onClick={() => setEstaAberto(false)}
+          >
+            Como Funciona
+          </LinkNavegacao>
+
+          <LinkNavegacao onClick={() => irPara("/cadastro")}>
+            Cadastre-se
+          </LinkNavegacao>
+
+          <LinkNavegacao href="#sobre" onClick={() => setEstaAberto(false)}>
+            Sobre
+          </LinkNavegacao>
+
+          <BotaoMinhaConta onClick={() => irPara("/login")}>
+            Entrar
           </BotaoMinhaConta>
         </ListaNavegacao>
       </MenuLateral>
